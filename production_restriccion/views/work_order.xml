@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_inherit_form" model="ir.ui.view">
+            <field name="name">view.mrp.inherit.form</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Componentes">
+                        <field name="state" invisible="1"/>
+                        <field name="name" invisible="1"/>
+                        <field name="material" widget="section_and_note_one2many" mode="tree" >
+                            <tree> 
+                                <field name="state" invisible="1"/>
+                                <field name="name" invisible="1"/>
+                                <field name="operation_id" invisible="1" domain="[('name','=',parent.name)]"/>
+                                <field name="product_id" />
+                                <field name="product_uom_qty"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+    </record>
+</odoo>

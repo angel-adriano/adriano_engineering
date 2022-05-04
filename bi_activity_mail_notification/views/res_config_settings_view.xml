@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.ui.view" id="view_res_config_settings_notifys">
+		<field name="name">res.config.settings.notify</field>
+		<field name="model">res.config.settings</field>    		
+		<field name="inherit_id" ref="crm.res_config_settings_view_form"/>    		
+		<field name="arch" type="xml">        					
+			<xpath expr="//div[hasclass('settings')]/div[@data-key='crm']" position="inside">
+				<h2 >Scheduled Activity Notification</h2>
+					<div class="row mt16 o_settings_container">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="activity_email_notification"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label string="Scheduled Activity Notification" for="activity_email_notification"/>
+                                <div class="text-muted">
+                                    Configure when and to whom you want to send email notification.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt16 o_settings_container" attrs="{'invisible': [('activity_email_notification','=',False)]}">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="edit_notification"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="edit_notification"/>
+                                <div class="text-muted">
+                                    Send email on modify scheduled activity
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt16 o_settings_container" attrs="{'invisible': [('edit_notification','=',False)]}">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="edit_create_user"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="edit_create_user"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="edit_assignee_user"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="edit_assignee_user"/>
+                                
+                            </div>
+                        </div>
+                    	</div>
+                	</div>
+
+                    <div class="row mt16 o_settings_container"  attrs="{'invisible': [('activity_email_notification','=',False)]}">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="done_notification"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="done_notification"/>
+                                <div class="text-muted">
+                                    Send email on done scheduled activity
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt16 o_settings_container" attrs="{'invisible': [('done_notification','=',False)]}">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="done_create_user"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="done_create_user"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="done_assignee_user"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="done_assignee_user"/>
+                                
+                            </div>
+                        </div>
+                    	</div>
+                	</div>
+
+                    <div class="row mt16 o_settings_container"  attrs="{'invisible': [('activity_email_notification','=',False)]}">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="cancel_notification"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="cancel_notification"/>
+                                <div class="text-muted">
+                                    Send email on cancel scheduled activity
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt16 o_settings_container" attrs="{'invisible': [('cancel_notification','=',False)]}">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="cancel_create_user"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="cancel_create_user"/>
+                                
+                            </div>
+                        </div>
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="cancel_assignee_user"/>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label for="cancel_assignee_user"/>
+                                
+                            </div>
+                        </div>
+                    	</div>
+
+                    </div>
+			</xpath>
+		</field>                	
+	</record>
+	<record model="ir.ui.view" id="view_mail_activity_notifys">
+		<field name="name">mail.activity.notify</field>
+		<field name="model">mail.activity</field>    		
+		<field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>    		
+		<field name="arch" type="xml">        					
+			<xpath expr="//field[@name='user_id']" position="after">
+				<field name="assign_id" invisible="1"/>
+                <field name="activity_status" invisible="1"/>
+                <field name="activity_feedback_email" invisible="1"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>

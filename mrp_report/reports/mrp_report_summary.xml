@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="mrp_report_external_layout">
+			<!-- Multicompany -->
+			<t t-if="not o and doc">
+				<t t-set="o" t-value="doc" />
+			</t>
+			<t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"/>
+			</t>
+			<t t-if="not o or not 'company_id' in o">
+				<t t-set="company" t-value="res_company"/>
+			</t>
+        <div class="header">
+			<div class="row">
+				<div class="col-xs-9 text-left" style="margin-top:20px;"
+					t-field="company.report_header" />
+			</div>
+			<div class="row zero_min_height">
+				<div class="col-xs-12">
+					<div style="border-bottom: 1px solid black;"/>
+				</div>
+			</div>
+        </div>
+
+        <div class="article o_report_layout_standard">
+            <t t-raw="0" />
+        </div>
+
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <ul class="list-inline mb4">
+	                <li t-if="company.phone" class="list-inline-item">Teléfono: <span t-field="company.phone"/></li>
+
+	                <li t-if="company.email" class="list-inline-item">&amp;bull;</li>
+	                <li t-if="company.email" class="list-inline-item" >Correo Electrónico: <span t-field="company.email"/></li>
+
+	                <li t-if="company.website" class="list-inline-item">&amp;bull;</li>
+	                <li t-if="company.website" class="list-inline-item">Página web: <span t-field="company.website"/></li>
+                </ul>
+
+                <div name="financial_infos">
+                    <span t-field="company.report_footer"/>
+                </div>
+
+                <div class="text-muted">
+                    Page: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+	
+    <report
+        id="mrp_summary_report"
+        model="mrp.report"
+        string="Reporte de produccion"
+        report_type="qweb-pdf"
+        name="mrp_report.production_report"
+        file="mrp_report.production_report"
+        print_report_name="'Plan de produccion'"
+    />
+
+    <template id="production_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.env.user.lang"/>
+				<t t-call="mrp_report.mrp_report_external_layout">
+                    <div class="page">
+                        <h2>
+                            Plan de produccion                        
+                        </h2>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th>Fecha de inicio programada</th>
+                                    <th>Cliente</th>
+                                    <th>Ciudad</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Origen</th>
+                                </tr>
+                                <tr t-foreach="o.get_mrp_records()" t-as="invoice">
+                                    <td>
+                                        <span t-field="invoice.date_planned_start"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="invoice.sale_order_id.partner_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="invoice.sale_order_id.partner_id.city"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="invoice.product_id"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="invoice.product_qty"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="invoice.sale_order_id"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+			</t>
+        </t>
+    </template>
+    <record id="paperformat_sale_order_landscape" model="report.paperformat">
+        <field name="name">PF Sale Order Landscape</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+		<field name="margin_top">10</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">3</field>
+        <field name="dpi">90</field>
+        <field name="report_ids" eval="[(6, 0, [ref('mrp_report.mrp_summary_report')])]"/>
+    </record>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <!--Email template -->
+    
+        <record id="email_template_done_notification" model="mail.template">
+            <field name="name">Activity Done Notification...!!</field>
+            <field name="subject">% if object.summary:
+                Done activity | ${object.activity_type_id.name or 'n/a' } - ${object.summary} of document  ${object.res_name}
+                % else:
+                Done activity | ${object.activity_type_id.name or 'n/a' } of document  ${object.res_name}
+                %endif</field>
+            <field name="model_id" ref="bi_activity_mail_notification.model_mail_activity" />
+            <field name="auto_delete" eval="True" />
+            <field name="body_html"><![CDATA[
+                    <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+                        <p>Dear <b>${object.create_user_id.name},</b></p><br/>
+                        % if object.summary:
+                        <p>Your Scheduled Activity | ${object.activity_type_id.name} - ${object.summary} of document ${object.res_name} has been done by ${object.assign_id.name}. </p><br/>
+                        % else:
+                        <p>Your Scheduled Activity | ${object.activity_type_id.name} of document ${object.res_name} has been done by ${object.assign_id.name}. </p><br/>
+                        %endif
+                        <b>Feedback: </b>${object.activity_feedback_email or ''}<br/>
+
+                    </div>
+                    <br/>
+                    <div style="margin: 16px 0px 16px 0px; font-size: 14px;">
+                        <a href='${object.mail_url}'
+                        style="background-color:#875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
+                        View <t t-esc="model_description or 'document'"/>
+                        </a>
+                    </div>
+                        ]]>
+            </field>
+        </record>
+
+        <record id="email_template_done_notification_assignee" model="mail.template">
+            <field name="name">Activity Done Notification...!!</field>
+            <field name="subject">% if object.summary:
+                Done activity | ${object.activity_type_id.name or 'n/a' } - ${object.summary} of document  ${object.res_name}
+                % else:
+                Done activity | ${object.activity_type_id.name or 'n/a' } of document  ${object.res_name}
+                %endif</field>
+            <field name="model_id" ref="bi_activity_mail_notification.model_mail_activity" />
+            <field name="auto_delete" eval="True" />
+            <field name="body_html"><![CDATA[
+                    <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+                        <p>Dear <b>${object.user_id.name},</b></p><br/>
+                        % if object.summary:
+                        <p>Your Scheduled Activity | ${object.activity_type_id.name} - ${object.summary} of document  ${object.res_name} has been done by ${object.assign_id.name}. </p><br/>
+                        % else:
+                        <p>Your Scheduled Activity | ${object.activity_type_id.name} of document ${object.res_name} has been done by ${object.assign_id.name}. </p><br/>
+                        %endif
+                        <b>Feedback:</b> ${object.activity_feedback_email or ''}<br/>
+                    </div>
+                    <br/>
+                    <div style="margin: 16px 0px 16px 0px; font-size: 14px;">
+                        <a href='${object.mail_url}'
+                        style="background-color:#875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
+                        View <t t-esc="model_description or 'document'"/>
+                        </a>
+                    </div>
+                        ]]>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

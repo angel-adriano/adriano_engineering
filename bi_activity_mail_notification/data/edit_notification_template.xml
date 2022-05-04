@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <!--Email template -->
+    
+        <record id="email_template_edit_notification" model="mail.template">
+            <field name="name">Activity Edit Notification...!!</field>
+            <field name="subject">% if object.summary:
+                    Modified activity | ${object.activity_type_id.name or 'n/a' } - ${object.summary} of document  ${object.res_name}
+                % else:
+                    Modified activity | ${object.activity_type_id.name or 'n/a' } of document  ${object.res_name}
+                %endif
+            </field>
+            <field name="model_id" ref="bi_activity_mail_notification.model_mail_activity" />
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_edit_notification_assignee" model="mail.template">
+            <field name="name">Activity Edit Notification...!!</field>
+            <field name="subject">% if object.summary:
+                    Modified activity | ${object.activity_type_id.name or 'n/a' } - ${object.summary} of document  ${object.res_name}
+                % else:
+                    Modified activity | ${object.activity_type_id.name or 'n/a' } of document  ${object.res_name}
+                %endif</field>
+            <field name="model_id" ref="bi_activity_mail_notification.model_mail_activity" />
+            <field name="auto_delete" eval="True" />
+        </record>
+        
+    </data>
+</odoo>

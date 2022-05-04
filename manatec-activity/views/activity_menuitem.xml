@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Menu -->
+
+        <record id="manatec_activity_base_menu_window" model="ir.actions.act_window">
+            <field name="name">Activities</field>
+            <field name="res_model">mail.activity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="view_id" ref="mail.mail_activity_view_calendar"/>
+            <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('manatec_activity_tree_view')}),
+                          (0, 0, {'view_mode': 'calendar', 'view_id': ref('manatec_activity_view_calendar')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('manatec_activity_view')})]"/>
+            <field name="search_view_id" ref="manatec_activity_search"/>
+	        <field name="act_window_id" ref="manatec_activity_view"/>
+	        <field name="domain" >[]</field>
+            <field name="context">{
+                'search_default_my_activities': 1,
+            }</field>
+        </record>
+        
+        <!-- Activity (menu) -->
+
+        <menuitem name="Meetings"
+                  id="menu_manatec_activity_meetings"
+                  parent="calendar.mail_menu_calendar"
+                  sequence="1"
+                  action="calendar.action_calendar_event"/>
+
+        <menuitem name="Activities"
+                  id="menu_manatec_activity_activities"
+                  parent="calendar.mail_menu_calendar"
+                  sequence="10"
+                  action="manatec_activity_base_menu_window"/>
+
+	    
+    </data>
+</odoo>
+
