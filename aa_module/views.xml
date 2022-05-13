@@ -1,0 +1,24 @@
+<odoo>
+    <record id="view_tree_todo" model="ir.ui.view">
+        <field name="name">view.tree.todo</field>
+        <field name="model">test.todo</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="test_todo_view" model="ir.actions.act_window">
+        <field name="name">Lista de tareas</field>
+        <!-- <field name="type">ir.actions.act_window</field> -->
+        <field name="res_model">test.todo</field>
+        <field name="view_mode">tree,form</field>
+        <!-- <field name="view_type">form</field> -->
+    </record>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="menu_todo" parent="" action="aa_module.test_todo_view"/>
+
+</odoo>

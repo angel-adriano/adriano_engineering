@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="model_access_todo" model="ir.model.access">
+        <field name="name">model.access.todo</field>
+        <field name="model_id" ref="aa_module.model_test_todo"></field>
+        <field name="group_id" ref="base.group_system"></field>
+        <field name="perm_read" eval="1"></field>
+        <field name="perm_write" eval="1"></field>
+        <field name="perm_create" eval="1"></field>
+        <field name="perm_unlink" eval="1"></field>
+    </record>
+</odoo>
