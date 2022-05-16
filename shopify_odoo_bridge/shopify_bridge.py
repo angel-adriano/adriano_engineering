@@ -177,7 +177,7 @@ class Bridge:
 				channel_id = self.id,
 				parent_id = address.customer_id,
 				store_id = address.id,
-				type = 'invoice',
+				type = 'delivery',
 			)
 		return address_data
 

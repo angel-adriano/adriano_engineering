@@ -5,8 +5,11 @@
 # License URL : <https://store.webkul.com/license.html/>
 ##############################################################################
 from re import sub
+from logging import getLogger
 
 from odoo import api,models
+
+_logger = getLogger(__name__)
 
 
 class Feed(models.Model):
@@ -54,6 +57,7 @@ class Feed(models.Model):
 
 	@api.model
 	def create_partner_invoice_id(self,partner_id,channel_id,invoice_partner_id=None):
+		_logger.info(">>>>inv>>>> partner_id={}, channel_id={}, invoice_partner_id={}".format(partner_id,channel_id,invoice_partner_id))
 		if self.channel != 'shopify':
 			return super().create_partner_invoice_id(partner_id,channel_id,invoice_partner_id)
 		store_id = invoice_partner_id
@@ -93,6 +97,7 @@ class Feed(models.Model):
 
 	@api.model
 	def create_partner_shipping_id(self,partner_id,channel_id,shipping_partner_id=None):
+		_logger.info(">>>>ship>>>> partner_id={}, channel_id={}, shipping_partner_id={}".format(partner_id,channel_id,shipping_partner_id))
 		if self.channel != 'shopify':
 			return super().create_partner_shipping_id(partner_id,channel_id,shipping_partner_id)
 		store_id = shipping_partner_id
