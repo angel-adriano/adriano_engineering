@@ -185,7 +185,7 @@ class ImportOperation(models.TransientModel):
 		return success_ids,error_ids,feeds
 
 	def create_partner(self,partner_data):
-		_logger.info(partner_data)
+		_logger.info("partner data >>>>> " + str(partner_data))
 		partner_feed = False
 		contact_data_list = partner_data.pop('contacts',[])
 # Todo: Change feed field from state_id,country_id to state_code,country_code
@@ -219,7 +219,7 @@ class ImportOperation(models.TransientModel):
 		return success_ids,error_ids,feeds
 
 	def create_order(self,order_data):
-		_logger.info(order_data)
+		_logger.info("order data >>>>> " + str(order_data))
 		order_feed = False
 # Todo: Change feed field from state_id,country_id to state_code,country_code
 		order_data['invoice_state_id']    = order_data.pop('invoice_state_code',False)

@@ -328,6 +328,7 @@ class WkFeed(models.Model):
             message=message
         )
 
+    # TODO: aqui se puede agregar RFC 
     def get_partner_invoice_vals(self,partner_id,channel_id):
         name = self.invoice_name
         if self.invoice_last_name:
@@ -356,6 +357,7 @@ class WkFeed(models.Model):
             vals['state_id'] = state_id.id
         return vals
 
+    # TODO: parece que aquí se crea 
     @api.model
     def create_partner_invoice_id(self, partner_id,channel_id,invoice_partner_id=None):
         partner_obj = self.env['res.partner']

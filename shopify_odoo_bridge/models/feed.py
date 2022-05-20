@@ -25,6 +25,7 @@ class Feed(models.Model):
 			(partner_id.state_id.code, self.invoice_state_id),
 			(partner_id.country_id.code, self.invoice_country_id),
 		]
+		_logger.info("match inv address >>> address_lines={} ".format(address_lines))
 		for local_address, remote_address in address_lines:
 			if not self.match_address(local_address, remote_address):
 				return False
@@ -39,6 +40,7 @@ class Feed(models.Model):
 			(partner_id.state_id.code, self.shipping_state_id),
 			(partner_id.country_id.code, self.shipping_country_id),
 		]
+		_logger.info("match ship address >>> address_lines={} ".format(address_lines))
 		for local_address, remote_address in address_lines:
 			if not self.match_address(local_address, remote_address):
 				return False
@@ -57,7 +59,7 @@ class Feed(models.Model):
 
 	@api.model
 	def create_partner_invoice_id(self,partner_id,channel_id,invoice_partner_id=None):
-		_logger.info(">>>>inv>>>> partner_id={}, channel_id={}, invoice_partner_id={}".format(partner_id,channel_id,invoice_partner_id))
+		_logger.info(">>>>inv>>>> partner_id={}, channel_id={}, invoice_partner_id={} ".format(partner_id,channel_id,invoice_partner_id))
 		if self.channel != 'shopify':
 			return super().create_partner_invoice_id(partner_id,channel_id,invoice_partner_id)
 		store_id = invoice_partner_id
@@ -97,7 +99,7 @@ class Feed(models.Model):
 
 	@api.model
 	def create_partner_shipping_id(self,partner_id,channel_id,shipping_partner_id=None):
-		_logger.info(">>>>ship>>>> partner_id={}, channel_id={}, shipping_partner_id={}".format(partner_id,channel_id,shipping_partner_id))
+		_logger.info(">>>>ship>>>> partner_id={}, channel_id={}, shipping_partner_id={} ".format(partner_id,channel_id,shipping_partner_id))
 		if self.channel != 'shopify':
 			return super().create_partner_shipping_id(partner_id,channel_id,shipping_partner_id)
 		store_id = shipping_partner_id
@@ -133,4 +135,5 @@ class Feed(models.Model):
 					'Neither can find order shipping address match in '
 					'local partner, nor in remote customer'
 				)
+		_logger.info(">>>>ship>>>> shipping_partner_id={}".format(shipping_partner_id))
 		return shipping_partner_id

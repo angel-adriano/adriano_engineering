@@ -29,11 +29,13 @@ PartnerFields = Fields + [
     'state_name',
     'country_id',
     'type',
-    'parent_id'
+    'parent_id',
+    'rfc',
 ]
 OrderFields = Fields + [
     'partner_id',
     'order_state',
+    'rfc',
     'carrier_id',
 
     'date_invoice',
@@ -117,6 +119,10 @@ class PartnerFeed(models.Model):
         string='Store Parent ID'
     )
 
+    rfc = fields.Char(
+        string='RFC'
+    )
+
     def import_partner(self,channel_id):
 
         message = ""
@@ -181,6 +187,7 @@ class PartnerFeed(models.Model):
 
         else:
             if state == 'done':
+                _logger.info("partner-feed.create_partner.vals >>> {}".format(vals))
                 try:
                     erp_id = self.env['res.partner'].create(vals)
                     create_id =  channel_id.create_partner_mapping(erp_id, store_id,_type)
@@ -298,6 +305,11 @@ class OrderFeed(models.Model):
     # min_date = fields.Char(
     #     string = 'Confirmation State'
     # )
+
+    rfc = fields.Char(
+        string='RFC'
+    ) 
+
     carrier_id = fields.Char(
         string='Delivery Method',
         help = 'Delivery Method Name',
@@ -697,6 +709,7 @@ class OrderFeed(models.Model):
                 message+='<br/>Error while order update.'
         else:
             if state == 'done':
+                _logger.info("order-feed.create_order.vals >>> {}".format(vals))
                 try:
                     order_state = vals.pop('order_state')
                     erp_id = self.env['sale.order'].create(vals)

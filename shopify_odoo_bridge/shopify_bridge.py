@@ -355,7 +355,10 @@ class Bridge:
 				)
 				order_data.update({'shipping_'+k:v for k,v in shipping_address.items()})
 			if invoice_address and shipping_address:
-				order_data.update(same_shipping_billing = same_address)
+				order_data.update(
+					same_shipping_billing = same_address,
+					rfc = order.billing_address.company or False
+				)
 
 		order_lines = [(5,0)]
 		for line in order.line_items:
