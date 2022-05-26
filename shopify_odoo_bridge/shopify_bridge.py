@@ -178,6 +178,7 @@ class Bridge:
 				parent_id = address.customer_id,
 				store_id = address.id,
 				type = 'delivery',
+				rfc = address.company or False,
 			)
 		return address_data
 
@@ -357,7 +358,6 @@ class Bridge:
 			if invoice_address and shipping_address:
 				order_data.update(
 					same_shipping_billing = same_address,
-					rfc = order.billing_address.company or False
 				)
 
 		order_lines = [(5,0)]

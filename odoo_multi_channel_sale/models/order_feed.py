@@ -35,7 +35,6 @@ PartnerFields = Fields + [
 OrderFields = Fields + [
     'partner_id',
     'order_state',
-    'rfc',
     'carrier_id',
 
     'date_invoice',
@@ -124,7 +123,8 @@ class PartnerFeed(models.Model):
     )
 
     def import_partner(self,channel_id):
-
+        # NOTE: aqui se actualiza/crea la informacion del contacto en res partner, 
+        #       incluso cuando la operacion order se ejecuta
         message = ""
         state = 'done'
         update_id = None
@@ -187,7 +187,6 @@ class PartnerFeed(models.Model):
 
         else:
             if state == 'done':
-                _logger.info("partner-feed.create_partner.vals >>> {}".format(vals))
                 try:
                     erp_id = self.env['res.partner'].create(vals)
                     create_id =  channel_id.create_partner_mapping(erp_id, store_id,_type)
@@ -305,10 +304,6 @@ class OrderFeed(models.Model):
     # min_date = fields.Char(
     #     string = 'Confirmation State'
     # )
-
-    rfc = fields.Char(
-        string='RFC'
-    ) 
 
     carrier_id = fields.Char(
         string='Delivery Method',
@@ -635,6 +630,8 @@ class OrderFeed(models.Model):
                 partner_invoice_id = res_partner.get('partner_invoice_id')
                 partner_shipping_id = res_partner.get('partner_shipping_id')
                 if partner_id and partner_invoice_id and partner_shipping_id:
+                    # NOTE: aqui se asignan los contacts a la orden 
+                    #       una vez limpios en feeds.get_order_partner_id
                     vals['partner_id'] = partner_id.id
                     vals['partner_invoice_id'] = partner_invoice_id.id
                     vals['partner_shipping_id'] = partner_shipping_id.id
@@ -709,7 +706,6 @@ class OrderFeed(models.Model):
                 message+='<br/>Error while order update.'
         else:
             if state == 'done':
-                _logger.info("order-feed.create_order.vals >>> {}".format(vals))
                 try:
                     order_state = vals.pop('order_state')
                     erp_id = self.env['sale.order'].create(vals)

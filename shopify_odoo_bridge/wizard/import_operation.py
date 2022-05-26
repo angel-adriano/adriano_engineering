@@ -82,6 +82,7 @@ class ImportOperation(models.TransientModel):
 				_logger.info("~~~~Latest Id: {}~~~~".format(kw.get('last_id')))
 				success_ids.extend(s_ids)
 				error_ids.extend(e_ids)
+				# NOTE: order crea las direcciones (contacts) si no existen, ¿las actualiza?
 				if self.channel_id.auto_evaluate_feed and feeds:
 					mapping_ids = feeds.with_context(get_mapping_ids=True).import_items()
 					create_ids.extend([mapping.id for mapping in mapping_ids.get('create_ids')])
@@ -172,6 +173,7 @@ class ImportOperation(models.TransientModel):
 					)
 		return product_feed
 
+	# NOTE: aqui se crean los partner_feed
 	def create_partners(self,partner_data_list):
 		success_ids,error_ids = [],[]
 		feeds = self.env['partner.feed']
@@ -185,7 +187,6 @@ class ImportOperation(models.TransientModel):
 		return success_ids,error_ids,feeds
 
 	def create_partner(self,partner_data):
-		_logger.info("partner data >>>>> " + str(partner_data))
 		partner_feed = False
 		contact_data_list = partner_data.pop('contacts',[])
 # Todo: Change feed field from state_id,country_id to state_code,country_code
@@ -206,6 +207,7 @@ class ImportOperation(models.TransientModel):
 				partner_feed+=self.create_partner(contact_data)
 		return partner_feed
 
+	# NOTE: aqui se crean los order_feed
 	def create_orders(self,order_data_list):
 		success_ids,error_ids = [],[]
 		feeds = self.env['order.feed']
@@ -219,7 +221,6 @@ class ImportOperation(models.TransientModel):
 		return success_ids,error_ids,feeds
 
 	def create_order(self,order_data):
-		_logger.info("order data >>>>> " + str(order_data))
 		order_feed = False
 # Todo: Change feed field from state_id,country_id to state_code,country_code
 		order_data['invoice_state_id']    = order_data.pop('invoice_state_code',False)
