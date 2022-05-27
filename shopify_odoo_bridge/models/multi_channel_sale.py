@@ -165,6 +165,7 @@ class MultiChannelSale(models.Model):
 		)
 
 	def shopify_import_product_cron(self):
+		# self.env['import.operation'].create({'channel_id': self.id}) is a ImportOperation obj
 		self.env['import.operation'].create({'channel_id': self.id}).import_with_filter(
 			object='product.template',
 			filter_type='data_range',

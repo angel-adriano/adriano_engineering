@@ -227,10 +227,13 @@ class WkFeed(models.Model):
         partner_shipping_id = None
         context = dict(self._context)
         context['no_mapping'] = self.customer_is_guest
+        # NOTE: se busca/crea el contact
         partner_id = self.with_context(context).create_partner_contact_id(
                 partner_id,channel_id,store_partner_id)
+        # NOTE: se busca/crea el invoice contact y hace match con las direcciones de shopify
         partner_invoice_id = self.with_context(context).create_partner_invoice_id(
             partner_id,channel_id,self.invoice_partner_id)
+        # NOTE: aqui se omite el shipping contact si es igual al invoice
         if self.same_shipping_billing:
             partner_shipping_id = partner_invoice_id
         else:
@@ -328,10 +331,12 @@ class WkFeed(models.Model):
             message=message
         )
 
+    
     def get_partner_invoice_vals(self,partner_id,channel_id):
         name = self.invoice_name
         if self.invoice_last_name:
             name = '%s %s' % (name, self.invoice_last_name)
+        # NOTE: aqui se puede agregar RFC, si es una tienda diferenta a Shopify
         vals = dict(
             type='invoice',
             name=self.invoice_name,
@@ -343,6 +348,7 @@ class WkFeed(models.Model):
             phone=self.invoice_phone,
             mobile=self.invoice_mobile,
             parent_id=partner_id.id,
+            # rfc=self.invoice_rfc,
             customer=False,
         )
         country_id = self.invoice_country_id and channel_id.get_country_id(
@@ -356,6 +362,7 @@ class WkFeed(models.Model):
             vals['state_id'] = state_id.id
         return vals
 
+    # NOTE: creacion del invoice contact
     @api.model
     def create_partner_invoice_id(self, partner_id,channel_id,invoice_partner_id=None):
         partner_obj = self.env['res.partner']
@@ -424,6 +431,8 @@ class WkFeed(models.Model):
         name = self.customer_name
         if self.customer_last_name:
             name = '%s %s' % (name, self.customer_last_name)
+
+        # TODO: agregar rfc directamente al contacto?
         vals = dict(
             type=_type,
             customer=1,
@@ -431,6 +440,7 @@ class WkFeed(models.Model):
             email=self.customer_email,
             phone=self.customer_phone,
             mobile=self.customer_mobile,
+            # rfc = self.invoice_rfc,
         )
         return vals
 
