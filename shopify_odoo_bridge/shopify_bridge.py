@@ -177,7 +177,8 @@ class Bridge:
 				channel_id = self.id,
 				parent_id = address.customer_id,
 				store_id = address.id,
-				type = 'invoice',
+				type = 'delivery',
+				rfc = address.company or False,
 			)
 		return address_data
 
@@ -355,7 +356,9 @@ class Bridge:
 				)
 				order_data.update({'shipping_'+k:v for k,v in shipping_address.items()})
 			if invoice_address and shipping_address:
-				order_data.update(same_shipping_billing = same_address)
+				order_data.update(
+					same_shipping_billing = same_address,
+				)
 
 		order_lines = [(5,0)]
 		for line in order.line_items:

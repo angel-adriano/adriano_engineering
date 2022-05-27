@@ -29,7 +29,8 @@ PartnerFields = Fields + [
     'state_name',
     'country_id',
     'type',
-    'parent_id'
+    'parent_id',
+    'rfc',
 ]
 OrderFields = Fields + [
     'partner_id',
@@ -117,8 +118,13 @@ class PartnerFeed(models.Model):
         string='Store Parent ID'
     )
 
-    def import_partner(self,channel_id):
+    rfc = fields.Char(
+        string='RFC'
+    )
 
+    def import_partner(self,channel_id):
+        # NOTE: aqui se actualiza/crea la informacion del contacto en res partner, 
+        #       incluso cuando la operacion order se ejecuta
         message = ""
         state = 'done'
         update_id = None
@@ -298,6 +304,7 @@ class OrderFeed(models.Model):
     # min_date = fields.Char(
     #     string = 'Confirmation State'
     # )
+
     carrier_id = fields.Char(
         string='Delivery Method',
         help = 'Delivery Method Name',
@@ -623,6 +630,8 @@ class OrderFeed(models.Model):
                 partner_invoice_id = res_partner.get('partner_invoice_id')
                 partner_shipping_id = res_partner.get('partner_shipping_id')
                 if partner_id and partner_invoice_id and partner_shipping_id:
+                    # NOTE: aqui se asignan los contacts a la orden 
+                    #       una vez limpios en feeds.get_order_partner_id
                     vals['partner_id'] = partner_id.id
                     vals['partner_invoice_id'] = partner_invoice_id.id
                     vals['partner_shipping_id'] = partner_shipping_id.id

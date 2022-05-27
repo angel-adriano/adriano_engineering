@@ -5,6 +5,7 @@
 # License URL : <https://store.webkul.com/license.html/>
 ##############################################################################
 from re import sub
+from logging import getLogger
 
 from odoo import api,models
 
@@ -14,6 +15,7 @@ class Feed(models.Model):
 
 
 	def match_invoice_partner(self,partner_id):
+		# NOTE: ambos objs (partner_id, self) tienen rfc como property
 		address_lines = [
 			(partner_id.street, self.invoice_street),
 			(partner_id.street2, self.invoice_street2),
@@ -54,6 +56,7 @@ class Feed(models.Model):
 
 	@api.model
 	def create_partner_invoice_id(self,partner_id,channel_id,invoice_partner_id=None):
+		# NOTE: funcion llamada en lugar de feeds.create_partner_invoice_id
 		if self.channel != 'shopify':
 			return super().create_partner_invoice_id(partner_id,channel_id,invoice_partner_id)
 		store_id = invoice_partner_id
@@ -81,18 +84,24 @@ class Feed(models.Model):
 					],
 				).with_context(get_mapping_ids=True).import_items()
 			invoice_partner_id = partner_id.child_ids.filtered(lambda x: self.match_invoice_partner(x))
+			# NOTE: aqui se cambia el delivery por invoice
+			# NOTE: filtra los id's creados y si uno hace match con la direccion de billing (shopi)
+			# 		quiere decir que esa direccion debe ser invoice (odoo)
 			if invoice_partner_id:
 				invoice_partner_id = invoice_partner_id[0]
 				invoice_partner_id.type = 'invoice'
 			else:
-				raise Exception(
-					'Neither can find order invoice address match in '
-					'local partner, nor in remote customer'
-				)
+				_error = ('Neither can find order invoice address match in '
+						  'local partner, nor in remote customer.\n')
+				_error += "\tstore_info(channel={}, customer_id={}) ".format(channel_id.channel,store_id)
+				if partner_id:
+					_error += "res.partner(id={}, name='{}')".format(partner_id.id,partner_id.name)
+				raise Exception(_error)
 		return invoice_partner_id
 
 	@api.model
 	def create_partner_shipping_id(self,partner_id,channel_id,shipping_partner_id=None):
+		# NOTE: funcion llamada en lugar de feeds.create_partner_invoice_id
 		if self.channel != 'shopify':
 			return super().create_partner_shipping_id(partner_id,channel_id,shipping_partner_id)
 		store_id = shipping_partner_id
@@ -124,8 +133,10 @@ class Feed(models.Model):
 				shipping_partner_id = shipping_partner_id[0]
 				shipping_partner_id.type = 'delivery'
 			else:
-				raise Exception(
-					'Neither can find order shipping address match in '
-					'local partner, nor in remote customer'
-				)
+				_error = ('Neither can find order shipping address match in '
+						  'local partner, nor in remote customer.\n')
+				_error += "\tstore_info(channel={}, customer_id={}) ".format(channel_id.channel,store_id)
+				if partner_id:
+					_error += "res.partner(id={}, name='{}')".format(partner_id.id,partner_id.name)
+				raise Exception(_error)
 		return shipping_partner_id
