@@ -298,9 +298,13 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field [@name='partner_id']" position="before">
+                    <field name="shop_order_id" invisible="1"/>
+                    <field name="shopify_sale"/>
+                </xpath>
                 <xpath expr="//field [@name='confirmation_date']" position="after">
                     <field name="delivery_date"/>
-                    <field name="source_id" string="Canal de venta:"/>
+                    <!--<field name="source_id" string="Canal de venta:"/>-->
                     <field name="journal_id" string="Procesador de pagos:"/>
                     <field name="forma_pago" string="Metodo de pago:"/>
                 </xpath>

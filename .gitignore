@@ -1,2 +1,3 @@
 # Compiled scripts
 __pycache__/
+*.pyc

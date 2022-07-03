@@ -19,7 +19,7 @@
     'version': '1.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'account', 'sale',
+    'depends': ['base', 'account', 'sale', 'crm', 'odoo_multi_channel_sale',
                 ],
     # always loaded
     'data': [
